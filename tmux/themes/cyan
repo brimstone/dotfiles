@@ -1,0 +1,16 @@
+# default window title colors
+set-window-option -g window-status-fg cyan
+set-window-option -g window-status-bg default
+set-window-option -g window-status-attr dim
+
+# active window title colors
+set-window-option -g window-status-current-attr reverse
+
+# active pane color
+set-option -g pane-active-border-bg default
+set-option -g pane-active-border-fg cyan
+
+# Status Bar
+set -g status-bg default
+set -g status-fg cyan
+set -g status-attr dim
