@@ -1,0 +1,35 @@
+URxvt*termName: rxvt-256color
+
+## borderless and no scrollbar
+URxvt*scrollBar_right: false
+URxvt*scrollBar: false
+URxvt*borderLess: false
+
+## teh fake transparency stuff
+!URxvt*inheritPixmap: true
+!URxvt*shading: 40
+!urxvt*transparent:	true
+
+## geometry and font
+#URxvt*font: xft:DejaVu Sans Mono:pixelsize=8
+URxvt*font: xft:DejaVu Sans Mono for Powerline:pixelsize=9
+URxvt*letterSpace: -2
+URxvt*background: rgba:0000/0000/0000/CCCC
+URxvt*depth: 32
+URxvt*foreground: rgba:ffff/ffff/ffff/FFFF
+#urxvt*shading:	30
+urxvt*saveLines:	0
+
+
+## prevent nasty menu bug
+URxvt.perl-ext-common: defaults,matcher,-option-popup,-selection-popup
+URxvt.urlLauncher: iceweasel
+URxvt.matcher.button: 2
+URxvt*matcher.pattern.1: \\b(mailto|http|https|ftp|file):[/]*[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt*matcher.pattern.2: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+
+URxvt*color4:	#2525FF
+URxvt*color12:	#5555FF
+
+URxvt.iso14755: false
+URxvt.iso14755_52: false
