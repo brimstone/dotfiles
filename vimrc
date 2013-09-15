@@ -41,6 +41,7 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType c call FileType_c()
+autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType markdown call FileType_txt()
 autocmd BufNewFile,BufRead *.txt call FileType_txt()
 
@@ -94,4 +95,5 @@ set shiftwidth=4
 set noexpandtab 
 
 " Unite
-nnoremap <C-p> :Unite file<cr>
+nnoremap <C-o> :Unite file<cr>
+nnoremap <C-t> :Unite tab<cr>
