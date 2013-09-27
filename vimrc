@@ -88,12 +88,16 @@ let g:Powerline_colorscheme = 'solarized256'
 " Network Oriented Reading, Writing and Browsing
 let g:netrw_silent	= 1
 
-" Tab options
+" Indent options
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set noexpandtab 
 
-" Unite
-nnoremap <C-o> :Unite file<cr>
-nnoremap <C-t> :Unite tab<cr>
+" Tab options
+map tp :tabp<cr>
+map tn :tabn<cr>
+
+" NERDTree
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary")
