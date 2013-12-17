@@ -99,5 +99,12 @@ map tp :tabp<cr>
 map tn :tabn<cr>
 
 " NERDTree
-autocmd vimenter * if !argc() | NERDTree | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary")
+let g:NERDTreeMinimalUI=1
+let g:NERDTreeDirArrows=1
+map <C-n> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+
+" From Damian Conway's talk at OSCON 2013
+nnoremap ; :
+nnoremap : ;
