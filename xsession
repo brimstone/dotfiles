@@ -4,6 +4,7 @@ xscreensaver -no-splash &
 wicd-client -t &
 blueman-applet &
 urxvtd -q -f -o
+solaar &
 xmodmap ~/.Xmodmap
 xcompmgr -n 2>/dev/null &
 #~/bin/notify-client >/dev/null &
