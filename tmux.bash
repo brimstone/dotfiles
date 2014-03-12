@@ -39,10 +39,13 @@ if [ "$STAT_BATT_C" = "0" ]; then
 	else
 		line[${#line[*]}]="D:${STAT_BATT_T}(${STAT_BATT_P}%)"
 	fi
-	prio[${#prio[*]}]="high"
 elif [ "$STAT_BATT_C" = "1" ]; then
 	line[${#line[*]}]="C:${STAT_BATT_T}(${STAT_BATT_P}%)"
+fi
+if [ "$STAT_BATT_P" -lt "50" ]; then
 	prio[${#prio[*]}]="high"
+else
+	prio[${#prio[*]}]="low"
 fi
 
 ################################################################################
