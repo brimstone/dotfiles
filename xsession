@@ -13,8 +13,11 @@ urxvtc &
 ) &
 while true; do
 	sleep 2m
-	pactl list | grep -q bluetooth-discover || pactl load-module module-bluetooth-discover
 	bin/us
+done &
+while true; do
+	pactl list | grep -q bluetooth-discover || pactl load-module module-bluetooth-discover
+	sleep 30
 done &
 while true; do
 	programming/bash/mkbackground.bash
