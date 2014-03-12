@@ -20,11 +20,13 @@ fi
 
 ################################################################################
 # interfaces
-gw=$(ip route list 0/0 | awk '{print $5}')
+gwdev=$(ip route list 0/0 | awk '{print $5}')
+gwip=$(ip route list 0/0 | awk '{print $3}')
+ping -c 1 -W 1 "$gwip" 2>/dev/null >/dev/null && gwcolor=64 || gwcolor=160
 ips=$(ip -o addr | awk "/inet /{
-	if (\$2==\"$gw\"){printf \"#[fg=colour64]\"};
+	if (\$2==\"$gwdev\"){printf \"#[fg=colour$gwcolor]\"};
 	if (\$2!=\"lo\"){printf \$2 \":\" \$4 \" \"}
-	if (\$2==\"$gw\"){printf \"#[fg=colour235, bg=colour254]\"};
+	if (\$2==\"$gwdev\"){printf \"#[fg=colour235, bg=colour254]\"};
 }")
 line[${#line[*]}]=${ips%% }
 prio[${#prio[*]}]="low"
