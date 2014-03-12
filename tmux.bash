@@ -87,11 +87,12 @@ if [ -e unison.log ]; then
 		s=$(TZ=UTC date -d@$diff +%H:%M:%S)
 		if [ $diff -gt 120 ]; then
 			line[${#line[*]}]="#[fg=colour160]U:$s#[fg=colour235, bg=colour254]"
+			prio[${#prio[*]}]="high"
 		else
 			line[${#line[*]}]="U:$s"
+			prio[${#prio[*]}]="low"
 		fi
 	fi
-	prio[${#prio[*]}]="high"
 fi
 
 for d in $(seq 1 $STAT_DISK_NUM); do
