@@ -23,6 +23,7 @@ while true; do
 	programming/bash/mkbackground.bash
 	sleep 10m
 done &
+xrandr --output LVDS1 --primary
 i3
 [ $? != 0 ] && urxvt
 while [ $(ps ax | grep -v grep | grep -c unison) != 0 ]; do
