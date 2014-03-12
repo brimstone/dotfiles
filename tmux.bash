@@ -7,6 +7,10 @@ source ~/bin/bashter
 line=( )
 prio=( )
 
+if [ -x /tmp/tmux ]; then
+	line[${#line[*]}]="$(/tmp/tmux)"
+	prio[${#prio[*]}]="high"
+fi
 ################################################################################
 # sysupdates
 if [ "$STAT_SYSUPDATES" -gt 0 ]; then
