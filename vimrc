@@ -107,4 +107,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 " From Damian Conway's talk at OSCON 2013
 nnoremap ; :
-nnoremap : ;
+"nnoremap : ;
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
