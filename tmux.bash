@@ -47,7 +47,7 @@ fi
 
 ################################################################################
 # load
-if [ $(sed -e 's/\.//' <<< "$STAT_LOAD") -gt 100 ]; then
+if [ $(echo "$STAT_LOAD" | sed -e 's/\.//') -gt 100 ]; then
 	line[${#line[*]}]="#[fg=colour160]L:${STAT_LOAD}#[fg=colour235, bg=colour254]"
 	prio[${#prio[*]}]="high"
 else
