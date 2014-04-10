@@ -2,9 +2,12 @@
 	email = brimstone@the.narro.ws
 	name = Matt
 [alias]
-	lol = log --graph --decorate --pretty=oneline --abbrev-commit
-	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	lol = log --color --graph --pretty=format:'%C(yellow)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lola = log --color --graph --pretty=format:'%C(yellow)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	up = "!git remote update -p; git merge --ff-only @{u}"
+	undo = reset --soft HEAD^
+	top  = "!watch -c \"git -c color.status=always status | sed -e \\\"\\$(git -c color.diff=always diff --stat | sed -e 's#/#\\\\\\\\/#g' | awk '/\\|/ {print \\\"s/\\\" \\$1 \\\"/\\\" \\$0 \\\"/;\\\"}')\\\"\""
 [color]
 	branch = auto
 	diff = auto
@@ -14,3 +17,7 @@
 	default = simple
 [branch]
 	autosetuprebase = always
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
