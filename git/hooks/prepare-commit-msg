@@ -1,0 +1,8 @@
+#!/bin/bash
+(
+git status --porcelain | grep -vE "^ |^\?\?" | sed -e 's/^. */\n* /;s/$/\n- /'
+echo
+git status | sed -e 's/^/#/'
+echo "#"
+git diff --cached | sed -e 's/^/#/'
+) > "$1"
