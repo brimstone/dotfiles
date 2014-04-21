@@ -1,8 +1,12 @@
 #!/bin/bash
-(
-git status --porcelain | grep -vE "^ |^\?\?" | sed -e 's/^. */\n* /;s/$/\n- /'
-echo
-git status | sed -e 's/^/#/'
-echo "#"
-git diff --cached | sed -e 's/^/#/'
-) > "$1"
+if [[ "$(grep -v "^#" "$1")" = "$(printf "\n")" ]]; then
+	(
+		git status --porcelain | grep -vE "^ |^\?\?" | sed -e 's/^. */\n* /;s/$/\n- /'
+		echo
+		git status | sed -e 's/^/#/'
+		echo "#"
+		git diff --cached | sed -e 's/^/#/'
+	) > "$1"
+fi
+
+exit 0
