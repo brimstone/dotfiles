@@ -7,7 +7,7 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	up = "!git remote update -p; git merge --ff-only @{u}"
 	undo = reset --soft HEAD^
-	top  = "!watch -c \"git -c color.status=always status | sed -e \\\"\\$(git -c color.diff=always diff --stat | sed -e 's#/#\\\\\\\\/#g' | awk '/\\|/ {print \\\"s/\\\" \\$1 \\\"/\\\" \\$0 \\\"/;\\\"}')\\\"\""
+	top  = "!watch -c \"git -c color.status=always status | sed -e \\\"\\$( (git -c color.diff=always diff --stat; git -c color.diff=always diff --stat --cached)| sed -e 's#/#\\\\\\\\/#g' | awk '/\\|/ {print \\\"s/ \\\" \\$1 \\\"/\\\" \\$0 \\\"/;\\\"}')\\\"\""
 [color]
 	branch = auto
 	diff = auto
