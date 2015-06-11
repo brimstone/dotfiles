@@ -41,6 +41,8 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType c call FileType_c()
+autocmd FileType ruby call FileType_rb()
+autocmd FileType json call FileType_json()
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType markdown call FileType_txt()
 autocmd BufNewFile,BufRead *.txt call FileType_txt()
@@ -65,6 +67,18 @@ set t_Co=256
 
 function! FileType_txt()
 	set spell spelllang=en_us
+endfunction
+
+function! FileType_rb()
+	set tabstop=2
+	set softtabstop=2
+	set shiftwidth=2
+	set expandtab
+	autocmd BufWritePost * silent !rubocop -a <afile> > /dev/null 2>/dev/null
+endfunction
+
+function! FileType_json()
+	autocmd BufWritePost * silent !jsonlint -i <afile> > /dev/null 2>/dev/null
 endfunction
 
 function! FileType_c()
@@ -110,3 +124,51 @@ nnoremap ; :
 "nnoremap : ;
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
+
+" https://stackoverflow.com/questions/2157914/can-vim-monitor-realtime-changes-to-a-file
+set autoread
+autocmd CursorHold * call Timer()
+function! Timer()
+  checktime
+  call feedkeys("f\e")
+endfunction
+
+set tabpagemax=50
+
+map <C-t> :TagbarToggle<CR>
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : '$GOPATH/bin/gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+let g:go_fmt_command = "goimports"
+
+" http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+let mapleader = "\<Space>"
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>t :NERDTreeToggle<CR>
+nnoremap <Leader>x :x<CR>
+nnoremap <Leader>q :q<CR>
