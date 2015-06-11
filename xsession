@@ -1,29 +1,37 @@
+keepalive() {
+	( while true; do
+		"$@" 2>/dev/null >/dev/null
+		sleep 1
+	done ) &
+}
 (
 sleep 2
 xscreensaver -no-splash &
-wicd-client -t &
-blueman-applet &
-urxvtd -q -f -o
-solaar &
-xmodmap ~/.Xmodmap
-xcompmgr -n 2>/dev/null &
-#~/bin/notify-client >/dev/null &
-parcellite &
-urxvtc &
+
+keepalive wicd-client -t
+keepalive blueman-applet
+#urxvtd -q -f -o
+keepalive solaar
+keepalive xcompmgr -n
+keepalive parcellite
+urxvt &
 ) &
 while true; do
 	sleep 2m
 	bin/us
+	xmodmap ~/.Xmodmap
 done &
 while true; do
 	pactl list | grep -q bluetooth-discover || pactl load-module module-bluetooth-discover
 	sleep 30
 done &
 while true; do
-	programming/bash/mkbackground.bash
+	bin/mkbackground.bash
 	sleep 10m
 done &
 xrandr --output LVDS1 --primary
+pactl set-sink-mute 0 1
+
 i3
 [ $? != 0 ] && urxvt
 while [ $(ps ax | grep -v grep | grep -c unison) != 0 ]; do
