@@ -22,14 +22,51 @@ urxvt*saveLines:	0
 
 
 ## prevent nasty menu bug
-URxvt.perl-ext-common: defaults,matcher,-option-popup,-selection-popup
-URxvt.urlLauncher: iceweasel
-URxvt.matcher.button: 2
-URxvt*matcher.pattern.1: \\b(mailto|http|https|ftp|file):[/]*[\\w-]\\.[\\w./?&@#-]*[\\w/-]
-URxvt*matcher.pattern.2: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt.perl-ext-common: defaults,-option-popup,-selection-popup
 
-URxvt*color4:	#2525FF
-URxvt*color12:	#5555FF
 
 URxvt.iso14755: false
 URxvt.iso14755_52: false
+
+#URxvt*buffered: false
+
+#URxvt.backgroundPixmap: /tmp/background.png\;style=root-tiled
+
+# from http://terminal.sexy
+! special
+*.foreground:   #839496
+*.background:   #002b36
+*.cursorColor:  #839496
+
+! black
+*.color0:       #073642
+*.color8:       #002b36
+
+! red
+*.color1:       #dc322f
+*.color9:       #cb4b16
+
+! green
+*.color2:       #859900
+*.color10:      #a7c000
+
+! yellow
+*.color3:       #b58900
+*.color11:      #e4ad00
+
+! blue
+*.color4:       #268bd2
+*.color12:      #2da4f7
+
+! magenta
+*.color5:       #d33682
+*.color13:      #ea3c90
+
+! cyan
+*.color6:       #2aa198
+*.color14:      #36d1c5
+
+! white
+*.color7:       #eee8d5
+*.color15:      #fdf6e3
+
