@@ -1,6 +1,49 @@
 #!/bin/bash
 
 ################################################################################
+[ $(pgrep -fc tmux.bash) -gt 4 ] && exit
+
+#declare -a CLASS_5=(60 'getmarta')
+declare -a CLASS_5=(3600 'duolingo')
+
+function F_getmarta () {
+	local prefix="MARTA"
+	unsett $prefix
+	STAT_MARTA=""
+	case "$STAT_ESSID_WLAN0" in
+#	"The.Narro.ws") 
+#		STAT_MARTA_DIRECTION="Airport"
+#		STAT_MARTA_TIME=$(curl -m 2 http://65.14.130.53/NextTrainService/RestServiceNextTrain.svc/GetNextTrain/Brookhaven,0 -s | jq -r 'map(select(.HEAD_SIGN == "Airport")) | .[0] | .WAITING_SECONDS')
+#		break
+#	;;
+	"pindrop-guest")
+		STAT_MARTA_DIRECTION="Doraville"
+		STAT_MARTA_TIME=$(curl -m 2 http://65.14.130.53/NextTrainService/RestServiceNextTrain.svc/GetNextTrain/Midtown,0 -s | jq -r 'map(select(.HEAD_SIGN == "Doraville")) | .[0] | .WAITING_SECONDS')
+		break
+	;;
+	esac
+	#doraville=$(curl -m 2 http://65.14.130.53/NextTrainService/RestServiceNextTrain.svc/GetNextTrain/West_End,0 -s | jq -r 'map(select(.HEAD_SIGN == "Doraville")) | .[0] | .WAITING_SECONDS')
+	STAT_MARTA_TIME=$(( $(date +%s) + STAT_MARTA_TIME ))
+	[ $1 ] && printSTAT $prefix
+}
+
+function getduolingo_week(){
+	curl -s "https://www.duolingo.com/users/$1" | jq "[ .calendar[] | select(.datetime > $(date -d 'last Sunday PDT' +%s)000 ) | .improvement ] | add"
+}
+
+function getduolingo_day(){
+	curl -s "https://www.duolingo.com/users/$1" | jq "[ .calendar[] | select(.datetime > $(date -d '00:00:00 PDT' +%s)000 ) | .improvement ] | add"
+}
+
+function F_duolingo() {
+	local prefix="DUOLINGO"
+	unsett $prefix
+	STAT_DUOLINGO_VANVICK=$(getduolingo_week vanvick)
+	STAT_DUOLINGO_BRIMSTONE=$(getduolingo_week brimstone)
+	STAT_DUOLINGO_DAY=$(getduolingo_DAY brimstone)
+	[ $1 ] && printSTAT $prefix
+}
+
 
 source ~/bin/bashter
 
@@ -8,8 +51,23 @@ line=( )
 prio=( )
 
 if [ -x /tmp/tmux ]; then
-	line[${#line[*]}]="$(/tmp/tmux)"
+	line[${#line[*]}]="$(timeout .3 /tmp/tmux)"
 	prio[${#prio[*]}]="high"
+fi
+
+if [ -n "$STAT_DUOLINGO_DAY" ]; then
+	line[${#line[*]}]="Today: $STAT_DUOLINGO_DAY"
+ 	prio[${#prio[*]}]="high"
+fi
+
+if [ -n "$STAT_DUOLINGO_BRIMSTONE" ]; then
+	line[${#line[*]}]="Ahead: $(( $STAT_DUOLINGO_BRIMSTONE - $STAT_DUOLINGO_VANVICK ))"
+ 	prio[${#prio[*]}]="high"
+fi
+
+if [ -n "$STAT_MARTA_DIRECTION" ]; then
+	line[${#line[*]}]="$STAT_MARTA_DIRECTION: $(( STAT_MARTA_TIME - $(date +%s) ))"
+ 	prio[${#prio[*]}]="high"
 fi
 ################################################################################
 # sysupdates
