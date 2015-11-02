@@ -9,6 +9,8 @@
 	undo = reset --soft HEAD^
 	top = "!watch -c \"git -c color.status=always status | sed -e \\\"\\$( (git -c color.diff=always diff --stat; git -c color.diff=always diff --stat --cached)| sed -e 's#/#\\\\\\\\/#g' | awk '/\\|/ {print \\\"s/ \\\" \\$1 \\\"/\\\" \\$0 \\\"/;\\\"}')\\\"\""
 	open = "!git remote -v|sed -n \"/ch)/{s+^.*//++;s+^.*@++;s+:+/+;s+\\(\\.git\\)\\? .*++;s+^+https://+p}\"|xargs -n1 -I_ sh -c \"xdg-open _||open _\""
+  pr  = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+  pr-clean = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
 [color]
 	branch = auto
 	diff = auto
