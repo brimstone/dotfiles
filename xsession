@@ -11,9 +11,10 @@ xscreensaver -no-splash &
 keepalive wicd-client -t
 keepalive blueman-applet
 #urxvtd -q -f -o
-keepalive solaar
 keepalive xcompmgr -n
 keepalive parcellite
+keepalive $HOME/local/go/bin/ipfs daemon
+solaar &
 urxvt &
 ) &
 while true; do
