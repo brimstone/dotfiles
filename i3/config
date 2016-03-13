@@ -55,12 +55,12 @@ new_float pixel 0
 hide_edge_borders both
 
 
-bindsym $mod+Ctrl+Return exec --no-startup-id urxvtc
+bindsym $mod+Ctrl+Return exec --no-startup-id urxvt
 bindsym $mod+Return exec "i3-msg workspace term; i3-msg scratchpad show"
 bindsym $mod+Shift+Return move container to workspace term
 
-assign [class="Iceweasel"] "www"
-bindsym $mod+Ctrl+w exec "iceweasel"
+assign [class="Firefox"] "www"
+bindsym $mod+Ctrl+w exec "firefox"
 bindsym $mod+w exec "i3-msg workspace www; i3-msg scratchpad show"
 bindsym $mod+Shift+w move container to workspace www
 
@@ -69,16 +69,16 @@ bindsym $mod+Ctrl+d exec "icedove"
 bindsym $mod+d exec "i3-msg workspace mail; i3-msg scratchpad show"
 bindsym $mod+Shift+d move container to workspace mail
 
-for_window [class="MPlayer"] floating enable
+bindsym $mod+b exec "i3-msg border toggle"
 
-workspace term output LVDS1
-workspace www output LVDS1
-workspace mail output LVDS1
+for_window [class="MPlayer"] floating enable
+for_window [class="qemu-system-x86_64"] floating enable
 
 ## Setup Feel
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+exec "i3-msg workspace term"
 # start a terminal
 exec --no-startup-id urxvtc
 
@@ -89,8 +89,11 @@ bindsym $mod+Shift+c kill
 #bindsym $mod+Space exec dmenu_run
 bindsym $mod+space exec --no-startup-id dmenu_run -nb '#3c3b37' -nf '#F0F0F0' -sb '#332d29' -sf '#F0F0F0'
 
-bindsym $mod+p exec --no-startup-id "pavucontrol"
+bindsym $mod+Ctrl+p exec --no-startup-id "pavucontrol"
+bindsym $mod+Ctrl+b exec --no-startup-id "blueman-manager"
 bindsym $mod+u exec --no-startup-id "bin/clipurl"
+bindsym $mod+F1 exec "xbacklight -dec 5"
+bindsym $mod+F2 exec "xbacklight -inc 5"
 bindsym $mod+F9 exec "bin/lock.sh"
 
 # change focus
@@ -120,8 +123,8 @@ bindsym $mod+s split vertical
 bindsym $mod+f fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+Mod1+1 layout splitv
-bindsym $mod+Mod1+2 layout splith
+bindsym $mod+Mod1+1 layout splith
+bindsym $mod+Mod1+2 layout splitv
 bindsym $mod+Mod1+3 layout stacking
 bindsym $mod+Mod1+4 layout tabbed
 
@@ -129,7 +132,7 @@ bindsym $mod+Mod1+4 layout tabbed
 bindsym $mod+Control+space floating toggle
 
 # change focus between tiling / floating windows
-#bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -178,10 +181,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -199,10 +202,10 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        position top
+	position top
 	#mode dock
 	tray_output primary
-        status_command "bin/i3-status"
+	status_command "bin/i3-status"
 	colors {
 		#statusline #AAAAAA
 		background #2d2d2d
