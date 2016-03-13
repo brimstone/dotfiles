@@ -42,10 +42,13 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd FileType c call FileType_c()
 autocmd FileType ruby call FileType_rb()
+autocmd FileType python call FileType_py()
 autocmd FileType json call FileType_json()
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd FileType markdown call FileType_txt()
+autocmd FileType gitcommit call FileType_txt()
 autocmd BufNewFile,BufRead *.txt call FileType_txt()
+autocmd FileType yaml call FileType_yaml()
 
 setlocal omnifunc=syntaxcomplete#Complete
 "set cot+=menuone
@@ -69,6 +72,14 @@ function! FileType_txt()
 	set spell spelllang=en_us
 endfunction
 
+function! FileType_py()
+	set tabstop=4
+	set softtabstop=4
+	set shiftwidth=4
+	set expandtab
+	autocmd BufWritePost * silent !autopep8 -i <afile> > /dev/null 2>/dev/null
+endfunction
+
 function! FileType_rb()
 	set tabstop=2
 	set softtabstop=2
@@ -83,6 +94,13 @@ endfunction
 
 function! FileType_c()
 	set omnifunc=ccomplete#Complete
+endfunction
+
+function! FileType_yaml()
+	set tabstop=2
+	set softtabstop=2
+	set shiftwidth=2
+	set expandtab
 endfunction
 
 " Pathogen
