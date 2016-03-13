@@ -189,15 +189,15 @@ for i in $(seq 0 $[${#line[*]} - 1]); do
 	output="$output#[fg=colour254, bg=colour235]\u2b82#[fg=colour235, bg=colour254] ${line[$i]} #[fg=colour235, bg=colour254]\u2b82"
 done
 
-length=$(tmux show-options -g -t main | grep status-right-length)
+#length=$(tmux show-options -g -t main | grep status-right-length)
 ## see if it's too long
-if [ $(echo -e "$output $(hostname) XXX MM/DD HH:MM:SS" | sed -E 's/#\[[^]]*\]//g' | wc -c) -gt ${length##* } ]; then
+#if [ $(echo -e "$output $(hostname) XXX MM/DD HH:MM:SS" | sed -E 's/#\[[^]]*\]//g' | wc -c) -gt ${length##* } ]; then
 # if it is, try again with just the "high" priority stuff"
-	output=""
-	for i in $(seq 0 $[${#line[*]} - 1]); do
-		if [ "${prio[$i]}" = "high" ]; then
-			output="$output#[fg=colour254, bg=colour235]\u2b82#[fg=colour235, bg=colour254] ${line[$i]} #[fg=colour235, bg=colour254]\u2b82"
-		fi
-	done
-fi
+#	output=""
+#	for i in $(seq 0 $[${#line[*]} - 1]); do
+#		if [ "${prio[$i]}" = "high" ]; then
+#			output="$output#[fg=colour254, bg=colour235]\u2b82#[fg=colour235, bg=colour254] ${line[$i]} #[fg=colour235, bg=colour254]\u2b82"
+#		fi
+#	done
+#fi
 echo -e "$output"
