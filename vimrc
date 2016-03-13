@@ -190,3 +190,7 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>t :NERDTreeToggle<CR>
 nnoremap <Leader>x :x<CR>
 nnoremap <Leader>q :q<CR>
+
+" Move visual block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
