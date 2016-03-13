@@ -4,7 +4,7 @@
 [ $(pgrep -fc tmux.bash) -gt 4 ] && exit
 
 #declare -a CLASS_5=(60 'getmarta')
-declare -a CLASS_5=(3600 'duolingo')
+#declare -a CLASS_5=(3600 'duolingo')
 
 function F_getmarta () {
 	local prefix="MARTA"
@@ -55,15 +55,15 @@ if [ -x /tmp/tmux ]; then
 	prio[${#prio[*]}]="high"
 fi
 
-if [ -n "$STAT_DUOLINGO_DAY" ]; then
-	line[${#line[*]}]="Today: $STAT_DUOLINGO_DAY"
- 	prio[${#prio[*]}]="high"
-fi
+#if [ -n "$STAT_DUOLINGO_DAY" ]; then
+#	line[${#line[*]}]="Today: $STAT_DUOLINGO_DAY"
+# 	prio[${#prio[*]}]="high"
+#fi
 
-if [ -n "$STAT_DUOLINGO_BRIMSTONE" ]; then
-	line[${#line[*]}]="Ahead: $(( $STAT_DUOLINGO_BRIMSTONE - $STAT_DUOLINGO_VANVICK ))"
- 	prio[${#prio[*]}]="high"
-fi
+#if [ -n "$STAT_DUOLINGO_BRIMSTONE" ]; then
+#	line[${#line[*]}]="Ahead: $(( $STAT_DUOLINGO_BRIMSTONE - $STAT_DUOLINGO_VANVICK ))"
+# 	prio[${#prio[*]}]="high"
+#fi
 
 if [ -n "$STAT_MARTA_DIRECTION" ]; then
 	line[${#line[*]}]="$STAT_MARTA_DIRECTION: $(( STAT_MARTA_TIME - $(date +%s) ))"
