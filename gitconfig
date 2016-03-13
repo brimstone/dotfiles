@@ -1,6 +1,6 @@
 [user]
 	email = brimstone@the.narro.ws
-	name = Matt
+	name = Matt Robinson
 [alias]
 	lol = log --color --graph --pretty=format:'%C(yellow)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	lola = log --color --graph --pretty=format:'%C(yellow)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
@@ -24,3 +24,5 @@
 	tool = vimdiff
 [difftool]
 	prompt = false
+[commit]
+	gpgsign = true
