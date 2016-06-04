@@ -132,6 +132,9 @@ let g:tagbar_type_go = {
 \ }
 
 let g:go_fmt_command = "goimports"
+let g:syntastic_go_checkers = ['go', 'golint']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
 
 " http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 let mapleader = "\<Space>"
