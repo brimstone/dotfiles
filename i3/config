@@ -230,3 +230,6 @@ bar {
 		urgent_workspace $red2 $red1 #FFFFFF
 	}
 }
+
+bindsym --release $mod+F12 exec "xdotool type --clearmodifiers '¯\_(ツ)_/¯'"
+bindsym --release $mod+F1 exec "xdotool type --clearmodifiers --file /tmp/xdotool1"
