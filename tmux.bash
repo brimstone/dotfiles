@@ -4,7 +4,7 @@
 [ $(pgrep -fc tmux.bash) -gt 4 ] && exit
 
 #declare -a CLASS_5=(60 'getmarta')
-#declare -a CLASS_5=(3600 'duolingo')
+declare -a CLASS_5=(3600 'duolingo')
 
 function F_getmarta () {
 	local prefix="MARTA"
@@ -38,7 +38,7 @@ function getduolingo_day(){
 function F_duolingo() {
 	local prefix="DUOLINGO"
 	unsett $prefix
-	STAT_DUOLINGO_VANVICK=$(getduolingo_week vanvick)
+	#STAT_DUOLINGO_VANVICK=$(getduolingo_week vanvick)
 	STAT_DUOLINGO_BRIMSTONE=$(getduolingo_week brimstone)
 	STAT_DUOLINGO_DAY=$(getduolingo_DAY brimstone)
 	[ $1 ] && printSTAT $prefix
@@ -55,10 +55,10 @@ if [ -x /tmp/tmux ]; then
 	prio[${#prio[*]}]="high"
 fi
 
-#if [ -n "$STAT_DUOLINGO_DAY" ]; then
-#	line[${#line[*]}]="Today: $STAT_DUOLINGO_DAY"
-# 	prio[${#prio[*]}]="high"
-#fi
+if [ -n "$STAT_DUOLINGO_DAY" ]; then
+	line[${#line[*]}]="Today: $STAT_DUOLINGO_DAY"
+ 	prio[${#prio[*]}]="high"
+fi
 
 #if [ -n "$STAT_DUOLINGO_BRIMSTONE" ]; then
 #	line[${#line[*]}]="Ahead: $(( $STAT_DUOLINGO_BRIMSTONE - $STAT_DUOLINGO_VANVICK ))"
@@ -76,6 +76,16 @@ if [ "$STAT_SYSUPDATES" -gt 0 ]; then
 	prio[${#prio[*]}]="high"
 fi
 
+
+################################################################################
+# wifi status
+
+AP=$(/sbin/iwconfig wlan0 | awk '/Access/ {print $NF}')
+if [ "$AP" != "Not-Associated" -a "$AP" != "dBm" ]; then
+	grep -q "$AP" ~/.wifi.aps && AP="$(awk "\$1 == \"$AP\" {print \$2}" ~/.wifi.aps)"
+	line[${#line[*]}]=$(printf "AP: %s" "$AP" )
+	prio[${#prio[*]}]="high"
+fi
 ################################################################################
 # interfaces
 gwdev=$(ip route list 0/0 | awk '{print $5}')
@@ -145,7 +155,7 @@ if [ -e unison.log ]; then
 		lastsync=$(date -d "$(grep finish unison.log | tail -n 1 | sed -e "s/^.*changes at //g;s/ on//g")" +%s)
 		now=$(date +%s)
 		diff=$[ $now - $lastsync ]
-		s=$(TZ=UTC date -d@$diff +%H:%M:%S)
+		s=$(date -u -d@$diff +%j:%H:%M:%S)
 		if [ $diff -gt 120 ]; then
 			line[${#line[*]}]="#[fg=colour160]U:$s#[fg=colour235, bg=colour254]"
 			prio[${#prio[*]}]="high"
@@ -189,15 +199,15 @@ for i in $(seq 0 $[${#line[*]} - 1]); do
 	output="$output#[fg=colour254, bg=colour235]\u2b82#[fg=colour235, bg=colour254] ${line[$i]} #[fg=colour235, bg=colour254]\u2b82"
 done
 
-#length=$(tmux show-options -g -t main | grep status-right-length)
-## see if it's too long
-#if [ $(echo -e "$output $(hostname) XXX MM/DD HH:MM:SS" | sed -E 's/#\[[^]]*\]//g' | wc -c) -gt ${length##* } ]; then
+length=$(tmux show-options -g -t main | grep status-right-length)
+# see if it's too long
+if [ $(echo -e "$output $(hostname) XXX MM/DD HH:MM:SS" | sed -E 's/#\[[^]]*\]//g' | wc -c) -gt ${length##* } ]; then
 # if it is, try again with just the "high" priority stuff"
-#	output=""
-#	for i in $(seq 0 $[${#line[*]} - 1]); do
-#		if [ "${prio[$i]}" = "high" ]; then
-#			output="$output#[fg=colour254, bg=colour235]\u2b82#[fg=colour235, bg=colour254] ${line[$i]} #[fg=colour235, bg=colour254]\u2b82"
-#		fi
-#	done
-#fi
+	output=""
+	for i in $(seq 0 $[${#line[*]} - 1]); do
+		if [ "${prio[$i]}" = "high" ]; then
+			output="$output#[fg=colour254, bg=colour235]\u2b82#[fg=colour235, bg=colour254] ${line[$i]} #[fg=colour235, bg=colour254]\u2b82"
+		fi
+	done
+fi
 echo -e "$output"
