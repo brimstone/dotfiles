@@ -92,10 +92,6 @@ for_window [class="rdesktop"] floating enable
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# start a terminal
-exec "i3-msg workspace 2"
-exec urxvt
-
 
 # kill focused window
 bindsym $mod+Shift+c kill
@@ -186,7 +182,6 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+q exit
 
-
 bindsym $mod+m exec "bin/bumpmouse"
 
 # resize window (you can also use the mouse for that)
@@ -233,3 +228,8 @@ bar {
 
 bindsym --release $mod+F12 exec "xdotool type --clearmodifiers '¯\_(ツ)_/¯'"
 bindsym --release $mod+F1 exec "xdotool type --clearmodifiers --file /tmp/xdotool1"
+
+# start a terminal
+exec "i3-msg workspace term"
+exec urxvt
+
