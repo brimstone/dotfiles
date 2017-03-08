@@ -64,8 +64,8 @@ bindsym $mod+Ctrl+w exec "firefox"
 bindsym $mod+w exec "i3-msg workspace www; i3-msg scratchpad show"
 bindsym $mod+Shift+w move container to workspace www
 
-assign [class="Icedove"] "mail"
-bindsym $mod+Ctrl+d exec "icedove"
+assign [class="Thunderbird"] "mail"
+bindsym $mod+Ctrl+d exec "thunderbird"
 bindsym $mod+d exec "i3-msg workspace mail; i3-msg scratchpad show"
 bindsym $mod+Shift+d move container to workspace mail
 
@@ -80,7 +80,7 @@ assign [class="xfreerdp"] "4"
 #bindsym $mod+c exec "i3-msg workspace mail; i3-msg scratchpad show"
 #bindsym $mod+Shift+c move container to workspace chat
 
-for_window [class="MPlayer"] floating enable
+#for_window [class="MPlayer"] floating enable
 for_window [class="qemu-system-x86_64"] floating enable
 for_window [class="rdesktop"] floating enable
 
@@ -228,8 +228,3 @@ bar {
 
 bindsym --release $mod+F12 exec "xdotool type --clearmodifiers '¯\_(ツ)_/¯'"
 bindsym --release $mod+F1 exec "xdotool type --clearmodifiers --file /tmp/xdotool1"
-
-# start a terminal
-exec "i3-msg workspace term"
-exec urxvt
-
