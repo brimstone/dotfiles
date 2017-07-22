@@ -5,5 +5,5 @@ function! FileType_html()
 	set softtabstop=2
 	set shiftwidth=2
 	set expandtab
-	autocmd BufWritePost * silent !tidy -im <afile> > /dev/null 2>/dev/null
+	"autocmd BufWritePost * silent !tidy -im <afile> > /dev/null 2>/dev/null
 endfunction
