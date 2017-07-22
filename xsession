@@ -5,7 +5,7 @@ keepalive() {
 	done ) &
 }
 (
-sleep 2
+sleep 10
 xscreensaver -no-splash &
 
 keepalive wicd-client -t
@@ -13,14 +13,12 @@ keepalive blueman-applet
 #urxvtd -q -f -o
 keepalive xcompmgr -n
 keepalive parcellite
-keepalive $HOME/local/go/bin/ipfs daemon
 solaar &
-urxvt &
 ) &
 while true; do
-	sleep 2m
-	bin/us
 	xmodmap ~/.Xmodmap
+	sleep 2m
+	[ ! -x bin/us ] || bin/us
 done &
 while true; do
 	pactl list | grep -q bluetooth-discover || pactl load-module module-bluetooth-discover
@@ -32,6 +30,12 @@ while true; do
 done &
 xrandr --output LVDS1 --primary
 pactl set-sink-mute 0 1
+
+(
+sleep 1
+i3-msg workspace term
+urxvt &
+) &
 
 i3
 [ $? != 0 ] && urxvt
