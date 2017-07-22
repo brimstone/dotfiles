@@ -1,31 +1,40 @@
 #!/bin/bash
 
 ################################################################################
-[ $(pgrep -fc tmux.bash) -gt 4 ] && exit
+[ $(pgrep -fc ~/.tmux.bash) -gt 4 ] && exit
 
-#declare -a CLASS_5=(60 'getmarta')
-declare -a CLASS_5=(3600 'duolingo')
+declare -a CLASS_5=(3600 'duolingo' 'docker')
 
-function F_getmarta () {
-	local prefix="MARTA"
-	unsett $prefix
-	STAT_MARTA=""
-	case "$STAT_ESSID_WLAN0" in
-#	"The.Narro.ws") 
-#		STAT_MARTA_DIRECTION="Airport"
-#		STAT_MARTA_TIME=$(curl -m 2 http://65.14.130.53/NextTrainService/RestServiceNextTrain.svc/GetNextTrain/Brookhaven,0 -s | jq -r 'map(select(.HEAD_SIGN == "Airport")) | .[0] | .WAITING_SECONDS')
-#		break
-#	;;
-	"pindrop-guest")
-		STAT_MARTA_DIRECTION="Doraville"
-		STAT_MARTA_TIME=$(curl -m 2 http://65.14.130.53/NextTrainService/RestServiceNextTrain.svc/GetNextTrain/Midtown,0 -s | jq -r 'map(select(.HEAD_SIGN == "Doraville")) | .[0] | .WAITING_SECONDS')
-		break
-	;;
+pbar() {
+	percent="$1"
+	width="$2"
+	actual=$[ $[ $[ $width * 8 ] * $percent ] / 100 ]
+
+	while [ $actual -gt 7 ]; do
+		printf "█"
+		actual=$[ $actual - 8 ]
+	done
+
+	case $actual in
+	0) printf " ";;
+	1) printf "▏";;
+	2) printf "▎";;
+	3) printf "▍";;
+	4) printf "▌";;
+	5) printf "▋";;
+	6) printf "▊";;
+	1) printf "▉";;
 	esac
-	#doraville=$(curl -m 2 http://65.14.130.53/NextTrainService/RestServiceNextTrain.svc/GetNextTrain/West_End,0 -s | jq -r 'map(select(.HEAD_SIGN == "Doraville")) | .[0] | .WAITING_SECONDS')
-	STAT_MARTA_TIME=$(( $(date +%s) + STAT_MARTA_TIME ))
-	[ $1 ] && printSTAT $prefix
+
+	actual=$[ $[ $width * 8 ] - $[ $[ $width * 8 ] * $percent ] / 100 ]
+	while [ $actual -gt 7 ]; do
+		printf " "
+		actual=$[ $actual - 8 ]
+	done
+
+	echo " $percent%"
 }
+
 
 function getduolingo_week(){
 	curl -s "https://www.duolingo.com/users/$1" | jq "[ .calendar[] | select(.datetime > $(date -d 'last Sunday PDT' +%s)000 ) | .improvement ] | add"
@@ -38,9 +47,17 @@ function getduolingo_day(){
 function F_duolingo() {
 	local prefix="DUOLINGO"
 	unsett $prefix
-	#STAT_DUOLINGO_VANVICK=$(getduolingo_week vanvick)
-	STAT_DUOLINGO_BRIMSTONE=$(getduolingo_week brimstone)
-	STAT_DUOLINGO_DAY=$(getduolingo_DAY brimstone)
+	#STAT_DUOLINGO_BRIMSTONE=$(getduolingo_week brimstone)
+	STAT_DUOLINGO_DAY=$(getduolingo_day brimstone)
+	[ $1 ] && printSTAT $prefix
+}
+
+function F_docker(){
+	local prefix="DOCKER"
+	unsett $prefix
+	STAT_DOCKER_PROGRESS="$(curl https://api.github.com/repos/docker/docker/milestones -s \
+| jq -r 'sort_by(.number) | "Docker "+.[0].title+": "+(.[0].open_issues|tostring)+"/"+(.[0].closed_issues|tostring)+" "+((.[0].closed_issues/(.[0].closed_issues+.[0].open_issues)*100)|tostring)+"%"' \
+| sed 's/\.[0-9]*%/%/')"
 	[ $1 ] && printSTAT $prefix
 }
 
@@ -51,24 +68,24 @@ line=( )
 prio=( )
 
 if [ -x /tmp/tmux ]; then
-	line[${#line[*]}]="$(timeout .3 /tmp/tmux)"
-	prio[${#prio[*]}]="high"
+	output=$(timeout .3 /tmp/tmux)
+	if [ -n "$output" ]; then
+		line[${#line[*]}]="$output"
+		prio[${#prio[*]}]="high"
+	fi
 fi
 
-if [ -n "$STAT_DUOLINGO_DAY" ]; then
-	line[${#line[*]}]="Today: $STAT_DUOLINGO_DAY"
+if [ -n "$STAT_DOCKER_PROGRESS" ]; then
+	line[${#line[*]}]="$STAT_DOCKER_PROGRESS"
  	prio[${#prio[*]}]="high"
 fi
 
-#if [ -n "$STAT_DUOLINGO_BRIMSTONE" ]; then
-#	line[${#line[*]}]="Ahead: $(( $STAT_DUOLINGO_BRIMSTONE - $STAT_DUOLINGO_VANVICK ))"
-# 	prio[${#prio[*]}]="high"
-#fi
-
-if [ -n "$STAT_MARTA_DIRECTION" ]; then
-	line[${#line[*]}]="$STAT_MARTA_DIRECTION: $(( STAT_MARTA_TIME - $(date +%s) ))"
+if [ "${STAT_DUOLINGO_DAY:-}" = "0" ]; then
+	line[${#line[*]}]="Need to DUOLINGO!"
  	prio[${#prio[*]}]="high"
 fi
+
+
 ################################################################################
 # sysupdates
 if [ "$STAT_SYSUPDATES" -gt 0 ]; then
@@ -82,30 +99,41 @@ fi
 
 AP=$(/sbin/iwconfig wlan0 | awk '/Access/ {print $NF}')
 if [ "$AP" != "Not-Associated" -a "$AP" != "dBm" ]; then
-	grep -q "$AP" ~/.wifi.aps && AP="$(awk "\$1 == \"$AP\" {print \$2}" ~/.wifi.aps)"
-	line[${#line[*]}]=$(printf "AP: %s" "$AP" )
-	prio[${#prio[*]}]="high"
+	[ -e "$HOME/.wifi.aps" ] && grep -q "$AP" ~/.wifi.aps && AP="$(awk "\$1 == \"$AP\" {print \$2}" ~/.wifi.aps)"
+	if [ "$AP" = "Home" ]; then
+		xscreensaver-command -deactivate 2>/dev/null >/dev/null &
+	fi
+	FREQ=$(/sbin/iwconfig wlan0 2>/dev/null | awk '/Frequency/{print $2 $3}' | awk -F: '{print $2}')
+	RATE=$(/sbin/iwconfig wlan0 2>/dev/null | awk '/Bit Rate/ {print $2 $3}' | awk -F= '{print $2}')
+	STRN=$(/sbin/iwconfig wlan0 2>/dev/null | awk -F"[/=]" '/Quality/ {printf "%0.0f%", ($2 / 70) * 100}')
+	line[${#line[*]}]="AP: $AP $STRN $FREQ $RATE"
+	prio[${#prio[*]}]="low"
 fi
 ################################################################################
 # interfaces
-gwdev=$(ip route list 0/0 | awk '{print $5}')
-gwip=$(ip route list 0/0 | awk '{print $3}')
-ping -c 1 -W 1 "$gwip" 2>/dev/null >/dev/null && gwcolor=64 || gwcolor=160
-ips=$(ip -o addr | awk "/inet /{
-	if (\$2==\"$gwdev\"){printf \"#[fg=colour$gwcolor]\"};
-	if (\$2!=\"lo\"){printf \$2 \":\" \$4 \" \"}
-	if (\$2==\"$gwdev\"){printf \"#[fg=colour235, bg=colour254]\"};
-}")
-line[${#line[*]}]=${ips%% }
+gwdev=$(ip route list 0/0 | sed 's/^.*dev //;s/ .*//')
+gwip=$(ip route list 0/0 | sed 's/^.*via //;s/ .*//')
+if [ "$gwip" != "default" ]; then
+	timeout .2s ping -c 1 -W 1 "$gwip" 2>/dev/null >/dev/null && gwcolor=64 || gwcolor=160
+	ips=$(ip -o addr | grep -vE "docker0|eth0.1" | awk "/inet /{
+		if (\$2==\"$gwdev\"){printf \"#[fg=colour$gwcolor]\"};
+		if (\$2!=\"lo\"){printf \$2 \":\" \$4 \" \"}
+		if (\$2==\"$gwdev\"){printf \"#[fg=colour235, bg=colour254]\"};
+	}")
+	line[${#line[*]}]=${ips%% }
+	prio[${#prio[*]}]="low"
+fi
+## bandwidth counter
+line[${#line[*]}]="$(/sbin/ifconfig "$gwdev" | awk '/packets/{a+=$5} END {print a / 1024/1024 " MB"}')"
 prio[${#prio[*]}]="low"
 
 ################################################################################
 # battery
 if [ "$STAT_BATT_C" = "0" ]; then
 	if [ "$STAT_BATT_P" -lt "10" ]; then
-		line[${#line[*]}]="#[fg=colour160]D:${STAT_BATT_T}(${STAT_BATT_P}%)#[fg=colour235, bg=colour254]"
+		line[${#line[*]}]="#[fg=colour160]⚡:${STAT_BATT_T}(${STAT_BATT_P}%)#[fg=colour235, bg=colour254]"
 	else
-		line[${#line[*]}]="D:${STAT_BATT_T}(${STAT_BATT_P}%)"
+		line[${#line[*]}]="⚡:${STAT_BATT_T}(${STAT_BATT_P}%)"
 	fi
 elif [ "$STAT_BATT_C" = "1" ]; then
 	line[${#line[*]}]="C:${STAT_BATT_T}(${STAT_BATT_P}%)"
@@ -148,11 +176,11 @@ fi
 
 ################################################################################
 # If we use unison on this system, show the time since the last sync
-if [ -e unison.log ]; then
-	if [ $(ps ax | grep -v grep | grep -c unison) -gt 0 ]; then
+if [ -e $HOME/unison.log ]; then
+	if pgrep unison >/dev/null; then
 		line[${#line[*]}]="#[fg=colour64]U:Running#[fg=colour235, bg=colour254]"
 	else
-		lastsync=$(date -d "$(grep finish unison.log | tail -n 1 | sed -e "s/^.*changes at //g;s/ on//g")" +%s)
+		lastsync=$(date -d "$(grep finish $HOME/unison.log | tail -n 1 | sed -e "s/^.*changes at //g;s/ on//g")" +%s)
 		now=$(date +%s)
 		diff=$[ $now - $lastsync ]
 		s=$(date -u -d@$diff +%j:%H:%M:%S)
