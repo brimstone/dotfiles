@@ -13,7 +13,8 @@ URxvt*borderLess: false
 ## geometry and font
 #URxvt*font: xft:DejaVu Sans Mono:pixelsize=8
 URxvt*font: xft:DejaVu Sans Mono for Powerline:pixelsize=9
-URxvt*letterSpace: -2
+URxvt*letterSpace: -1
+Xft.rgba: none
 URxvt*background: rgba:0000/0000/0000/CCCC
 URxvt*depth: 32
 URxvt*foreground: rgba:ffff/ffff/ffff/FFFF
