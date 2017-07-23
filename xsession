@@ -31,12 +31,6 @@ done &
 xrandr --output LVDS1 --primary
 pactl set-sink-mute 0 1
 
-(
-sleep 1
-i3-msg workspace term
-urxvt &
-) &
-
 i3
 [ $? != 0 ] && urxvt
 while [ $(ps ax | grep -v grep | grep -c unison) != 0 ]; do

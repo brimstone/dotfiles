@@ -102,7 +102,7 @@ bindsym $mod+space exec --no-startup-id dmenu_run -nb '#3c3b37' -nf '#F0F0F0' -s
 
 bindsym $mod+Control+p exec --no-startup-id "pavucontrol"
 bindsym $mod+u exec --no-startup-id "bin/clipurl"
-bindsym $mod+F9 exec "bin/lock.sh"
+bindsym $mod+F9 exec "bin/lockscreen"
 bindsym $mod+Mod1+F9 exec "xscreensaver-command --lock"
 
 # change focus
@@ -228,3 +228,5 @@ bar {
 
 bindsym --release $mod+F12 exec "xdotool type --clearmodifiers '¯\_(ツ)_/¯'"
 bindsym --release $mod+F1 exec "xdotool type --clearmodifiers --file /tmp/xdotool1"
+
+exec "i3-msg workspace term; i3-msg exec urxvt"
