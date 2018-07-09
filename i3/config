@@ -141,7 +141,7 @@ bindsym $mod+Mod1+4 layout tabbed
 bindsym $mod+Control+space floating toggle
 
 # change focus between tiling / floating windows
-#bindsym $mod+space focus mode_toggle
+bindsym $mod+Tab focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -226,7 +226,13 @@ bar {
 	}
 }
 
-bindsym --release $mod+F12 exec "xdotool type --clearmodifiers '¯\_(ツ)_/¯'"
-bindsym --release $mod+F1 exec "xdotool type --clearmodifiers --file /tmp/xdotool1"
+bindsym --release $mod+F11 exec "/tmp/f11"
+bindsym --release $mod+F12 exec "xdotool type '¯\_(ツ)_/¯'"
+bindsym --release $mod+F1  exec "xdotool type --file /tmp/xdotool1"
+bindsym --release $mod+m   exec "bash -c 'xdotool mousemove_relative -p $[ $RANDOM % 360 ] 50'"
+bindsym --release $mod+t   exec "bin/token"
+
+bindsym --release Print      exec "f=\\"/tmp/$(zenity --entry --text='File name in /tmp?').png\\";maim -s | convert - \( +clone -background black -shadow 80x3+5+5 \) +swap -background none -layers merge +repage \\"$f\\""
+bindsym --release Ctrl+Print exec "f=\\"/tmp/$(zenity --entry --text='File name in /tmp?').png\\";maim -i $(xdotool selectwindow) | convert - \( +clone -background black -shadow 80x3+5+5 \) +swap -background none -layers merge +repage \\"$f\\""
 
 exec "i3-msg workspace term; i3-msg exec urxvt"
