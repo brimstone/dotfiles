@@ -133,6 +133,8 @@ let g:tagbar_type_go = {
 
 let g:go_fmt_command = "goimports"
 let g:syntastic_go_checkers = ['go', 'golint']
+"let g:syntastic_go_checkers = ['golint']
+"let g:syntastic_go_go_build_args = "-o /dev/null -i"
 "let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 
@@ -150,3 +152,5 @@ vnoremap K :m '<-2<CR>gv=gv
 " Highlight whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+\%#\@<!$/
+
+filetype plugin indent on
