@@ -29,7 +29,7 @@ set history=10	" disable our search history
 
 " set status line
 set statusline=%<%f\ %h%m%r%=%-20.(line=%l,col=%c%V,totlin=%L%)
-set laststatus=2 
+set laststatus=2
 
 set encoding=utf-8
 set modeline
@@ -50,7 +50,7 @@ cmap w!! w !sudo tee % >/dev/null
 :noremap <F4> :set hlsearch! hlsearch?<CR>
 
 map <F5> :!clear; make && make test <RETURN>
-set t_Co=256 
+set t_Co=256
 
 " Pathogen
 call pathogen#infect()
@@ -73,7 +73,7 @@ let g:netrw_silent	= 1
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-set noexpandtab 
+set noexpandtab
 
 " Tab options
 map tp :tabp<cr>
@@ -154,3 +154,6 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+\%#\@<!$/
 
 filetype plugin indent on
+
+" automatically clean up trailing whitespace
+autocmd BufWritePre * :%s/\s\+$//e
