@@ -1,39 +1,85 @@
 URxvt*termName: rxvt-256color
 
-## borderless and no scrollbar
+!# borderless and no scrollbar
 URxvt*scrollBar_right: false
 URxvt*scrollBar: false
 URxvt*borderLess: false
 
-## teh fake transparency stuff
+!# teh fake transparency stuff
 !URxvt*inheritPixmap: true
-!URxvt*shading: 40
-!urxvt*transparent:	true
+URxvt*shading: 30
+urxvt*transparent:	true
 
-## geometry and font
-#URxvt*font: xft:DejaVu Sans Mono:pixelsize=8
-URxvt*font: xft:DejaVu Sans Mono for Powerline:pixelsize=9
+!# geometry and font
+!URxvt*font: xft:DejaVu Sans Mono:pixelsize=8
+URxvt*font: xft:DejaVu Sans Mono for Powerline:pixelsize=14, \
+            -*-unifont-*-*-*-*-*-*-*-*-*-*-*-*
 URxvt*letterSpace: -1
 Xft.rgba: none
-URxvt*background: rgba:0000/0000/0000/CCCC
-URxvt*depth: 32
+#URxvt*background: rgba:0000/0000/0000/CCCC
+#URxvt*depth: 32
 URxvt*foreground: rgba:ffff/ffff/ffff/FFFF
-#urxvt*shading:	30
+!urxvt*shading:	30
 urxvt*saveLines:	0
 
 
-## prevent nasty menu bug
+!# prevent nasty menu bug
 URxvt.perl-ext-common: defaults,-option-popup,-selection-popup
 
 
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 
-#URxvt*buffered: false
+!URxvt*buffered: false
 
-#URxvt.backgroundPixmap: /tmp/background.png\;style=root-tiled
+!URxvt.backgroundPixmap: /tmp/background.png\;style=root-tiled
 
-# from http://terminal.sexy
+URxvt.keysym.M-C-1: command:\033]710;xft:DejaVu Sans Mono for Powerline:pixelsize=10\007\033]711;xft:DejaVu Sans Mono for Powerline:pixelsize=10\007
+URxvt.keysym.M-C-2: command:\033]710;xft:DejaVu Sans Mono for Powerline:pixelsize=12\007\033]711;xft:DejaVu Sans Mono for Powerline:pixelsize=12\007
+URxvt.keysym.M-C-3: command:\033]710;xft:DejaVu Sans Mono for Powerline:pixelsize=14\007\033]711;xft:DejaVu Sans Mono for Powerline:pixelsize=14\007
+URxvt.keysym.M-C-4: command:\033]710;xft:DejaVu Sans Mono for Powerline:pixelsize=16\007\033]711;xft:DejaVu Sans Mono for Powerline:pixelsize=16\007
+URxvt.keysym.M-C-5: command:\033]710;xft:DejaVu Sans Mono for Powerline:pixelsize=24\007\033]711;xft:DejaVu Sans Mono for Powerline:pixelsize=24\007
+URxvt.keysym.M-C-8: command:\033]11;rgba:0000/0000/0000/FFFF\007
+URxvt.keysym.M-C-9: command:\033]11;rgba:0000/0000/0000/CCCC\007
+
+! from http://terminal.sexy
+! special
+!*.foreground:   #839496
+!*.background:   #002b36
+!*.cursorColor:  #839496
+
+! black
+!*.color0:       #073642
+!*.color8:       #002b36
+
+! red
+!*.color1:       #dc322f
+!*.color9:       #cb4b16
+
+! green
+!*.color2:       #859900
+!*.color10:      #a7c000
+
+! yellow
+!*.color3:       #b58900
+!*.color11:      #e4ad00
+
+! blue
+!*.color4:       #268bd2
+!*.color12:      #2da4f7
+
+! magenta
+!*.color5:       #d33682
+!*.color13:      #ea3c90
+
+! cyan
+!*.color6:       #2aa198
+!*.color14:      #36d1c5
+
+! white
+!*.color7:       #eee8d5
+!*.color15:      #fdf6e3
+
 ! special
 *.foreground:   #839496
 *.background:   #002b36
@@ -70,4 +116,3 @@ URxvt.iso14755_52: false
 ! white
 *.color7:       #eee8d5
 *.color15:      #fdf6e3
-
