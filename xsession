@@ -4,6 +4,8 @@ keepalive() {
 		sleep 1
 	done ) &
 }
+
+export PATH=$PATH:$HOME/bin
 (
 sleep 10
 xscreensaver -no-splash &
@@ -11,18 +13,19 @@ xscreensaver -no-splash &
 keepalive wicd-client -t
 keepalive blueman-applet
 #urxvtd -q -f -o
-keepalive xcompmgr -n
+#keepalive xcompmgr -n
 keepalive parcellite
-solaar &
+keepalive ~/bin/dashboard-agent
+keepalive afuse -f -o timeout=300 -o mount_template='sshfs -o reconnect %r:/ %m' -o unmount_template='fusermount -u -z %m' ~/mnt/sshfs
+keepalive afuse -f -o timeout=300 -o mount_template='bash -c "rclone mount --vfs-cache-mode full --no-modtime --vfs-cache-max-age 1m --daemon %r: %m; sleep 1"' -o unmount_template='fusermount -u -z %m' ~/mnt/rclone
+keepalive ibus-daemon
+keepalive nm-applet
+xcape
 ) &
 while true; do
 	xmodmap ~/.Xmodmap
 	sleep 2m
-	[ ! -x bin/us ] || bin/us
-done &
-while true; do
-	pactl list | grep -q bluetooth-discover || pactl load-module module-bluetooth-discover
-	sleep 30
+	[ ! -x bin/us ] || bin/us >/dev/null 2>&1
 done &
 while true; do
 	bin/mkbackground.bash
@@ -30,6 +33,9 @@ while true; do
 done &
 xrandr --output LVDS1 --primary
 pactl set-sink-mute 0 1
+
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+autorandr --change
 
 i3
 [ $? != 0 ] && urxvt
